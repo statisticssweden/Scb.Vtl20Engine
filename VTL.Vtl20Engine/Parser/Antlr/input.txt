@@ -1,0 +1,13 @@
+define hierarchical ruleset sex_hr (valuedomain rule sex) is 
+kulle: when apa = "5" then TOTAL = MALE + FEMALE errorcode "fel";
+bulle: when apa = "6" then TOTAL = MALE + FEMALE
+end hierarchical ruleset;
+
+/*
+define operator max1 (x integer, y integer)
+returns boolean is
+(
+if x > y then x else y
+)
+end define operator;
+*/
