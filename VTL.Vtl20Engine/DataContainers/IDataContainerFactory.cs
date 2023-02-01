@@ -10,6 +10,7 @@ namespace VTL.Vtl20Engine.DataContainers
         /// <param name="size">Expected number of datum (cells) in the container to be created</param>
         /// <returns>New DataPointContainer</returns>
         IDataPointContainer CreateDataPointContainer(int size);
+
         /// <summary>
         /// Creates a suitable ComponentContainer
         /// </summary>

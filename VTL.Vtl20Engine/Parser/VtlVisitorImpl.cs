@@ -26,8 +26,8 @@ namespace VTL.Vtl20Engine.Parser
         private readonly List<Operand> _heap;
         private readonly Stack<Operand> _stack;
         private string _alias;
-        private bool _validation;
-        private int overflowIndicator;
+        private readonly bool _validation;
+        private int _overflowIndicator;
 
         public IExternalFunctionExecutor ExternalFunctionExecutor { get; set; }
 
@@ -36,7 +36,7 @@ namespace VTL.Vtl20Engine.Parser
             _heap = heap;
             _stack = new Stack<Operand>();
             _validation = validation;
-            overflowIndicator = 0;
+            _overflowIndicator = 0;
         }
 
         public override Operand VisitStart(VtlParser.StartContext context)
@@ -114,7 +114,7 @@ namespace VTL.Vtl20Engine.Parser
 
         public override Operand VisitTemporaryAssignment([NotNull] VtlParser.TemporaryAssignmentContext context)
         {
-            if (overflowIndicator++ > 1000) throw new Exception($"Koden innehåller cirkelreferenser gällande operand {_alias}, eller innehåller för många tilldelningar.");
+            if (_overflowIndicator++ > 1000) throw new Exception($"Koden innehåller cirkelreferenser gällande operand {_alias}, eller innehåller för många tilldelningar.");
             _alias = context.varID().GetText();
             var expr = Visit(context.expr());
             return new Operand
@@ -128,7 +128,7 @@ namespace VTL.Vtl20Engine.Parser
 
         public override Operand VisitPersistAssignment([NotNull] VtlParser.PersistAssignmentContext context)
         {
-            if (overflowIndicator++ > 1000) throw new Exception($"Koden innehåller cirkelreferenser gällande operand {_alias}, eller innehåller för många tilldelningar.");
+            if (_overflowIndicator++ > 1000) throw new Exception($"Koden innehåller cirkelreferenser gällande operand {_alias}, eller innehåller för många tilldelningar.");
             var alias = context.varID().GetText();
             var expr = Visit(context.expr());
             return new Operand

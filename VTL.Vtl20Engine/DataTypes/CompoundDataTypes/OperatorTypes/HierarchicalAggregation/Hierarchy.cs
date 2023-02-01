@@ -40,10 +40,10 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.Hierarchical
         private readonly ValidationMode _mode;
         private readonly OutputModeHierarchy _output;
 
-        public Hierarchy(Operand inOperand, 
-            HierarchicalRuleset ruleset, 
-            string componentName, 
-            InputModeHierarchy input, 
+        public Hierarchy(Operand inOperand,
+            HierarchicalRuleset ruleset,
+            string componentName,
+            InputModeHierarchy input,
             ValidationMode mode,
             OutputModeHierarchy output)
         {
@@ -129,11 +129,16 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.Hierarchical
 
             var measure = dataSet.DataSetComponents.FirstOrDefault(m => m.Role == ComponentType.ComponentRole.Measure);
             var valueComponentIndex = dataSet.IndexOfComponent(measure.Name);
+            var valueComponentDataType = dataSet.DataSetComponents[valueComponentIndex].DataType;
 
-            var resultDataPoints = VtlEngine.DataContainerFactory.CreateDataPointContainer(
-                dataSet.DataPointCount * dataSet.DataSetComponents.Length);
+            var resultDataPoints = VtlEngine.DataContainerFactory.CreateDataPointContainer(dataSet.DataPointCount * dataSet.DataSetComponents.Length);
             resultDataPoints.OriginalComponentOrder = dataSet.ComponentSortOrder;
             resultDataPoints.OriginalSortOrder = dataSet.DataPoints.SortOrder ?? dataSet.DataPoints.OriginalSortOrder;
+
+            if (dataSet.DataPointCount == 0 && _mode == ValidationMode.AlwaysZero)
+            {
+                return new DataSetType(dataSet.DataSetComponents, resultDataPoints);
+            }
 
             var dataPointEnumerator = dataSet.DataPoints.GetEnumerator();
             DataPointType lastDataPoint = null;
@@ -150,7 +155,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.Hierarchical
                 // har den nya datapunkten andra identifiers än den förra?
                 if (lastDataPoint != null && !SameIdentifiers(currentDataPoint, lastDataPoint, ruleComponentIndex))
                 {
-                    foreach (var dp in PerformCalculation(partition, ruleComponentIndex, valueComponentIndex))
+                    foreach (var dp in PerformCalculation(partition, ruleComponentIndex, valueComponentIndex, valueComponentDataType))
                     {
                         // depending on mode
                         resultDataPoints.Add(dp);
@@ -163,7 +168,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.Hierarchical
                 partition.Add(currentDataPoint);
             }
 
-            foreach (var dp in PerformCalculation(partition, ruleComponentIndex, valueComponentIndex))
+            foreach (var dp in PerformCalculation(partition, ruleComponentIndex, valueComponentIndex, valueComponentDataType))
             {
                 resultDataPoints.Add(dp);
             }
@@ -222,13 +227,12 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.Hierarchical
         }
 
         private IEnumerable<DataPointType> PerformCalculation(IEnumerable<DataPointType> partition,
-            int ruleComponentIndex, int valueComponentIndex)
+            int ruleComponentIndex, int valueComponentIndex, Type valueComponentType)
         {
             var result = new List<DataPointType>();
             foreach (var rule in _ruleset.Rules)
             {
                 var dataPoint = new DataPointType(partition.FirstOrDefault());
-                var valueComponentType = dataPoint[valueComponentIndex].GetType();
                 dataPoint[ruleComponentIndex] = new StringType(rule.LeftCodeItem.CodeItemName);
                 dataPoint[valueComponentIndex] = new IntegerType(null);
                 bool found1 = false, found2 = false;

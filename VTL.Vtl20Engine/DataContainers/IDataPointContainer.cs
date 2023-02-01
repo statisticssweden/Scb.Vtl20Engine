@@ -19,7 +19,7 @@ namespace VTL.Vtl20Engine.DataContainers
         string[] OriginalComponentOrder { get; set; }
 
         /// <summary>
-        /// Order of the data when read from the datahandler
+        /// Order of the data when read from the data handler
         /// </summary>
         OrderByName[] OriginalSortOrder { get; set; }
 
@@ -28,19 +28,40 @@ namespace VTL.Vtl20Engine.DataContainers
         /// </summary>
         OrderByName[] SortOrder { get; set; }
 
+        /// <summary>
+        /// Flushes any buffer in the data container at the end of any writing operation
+        /// </summary>
         void Flush();
 
         /// <summary>
-        /// Number of datapoints in the data
+        /// Number of data points in the data
         /// </summary>
         int Length { get; }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through all data points
+        /// </summary>
+        /// <returns>The enumerator object</returns>
         IEnumerator<DataPointType> GetEnumerator();
 
-        IEnumerator<ScalarType> GetEnumerator(string componentname);
+        /// <summary>
+        /// Returns an enumerator that iterates through all values of the specified component
+        /// </summary>
+        /// <param name="componentName">The name of the component to iterate through</param>
+        /// <returns>The enumerator object</returns>
+        IEnumerator<ScalarType> GetEnumerator(string componentName);
 
+        /// <summary>
+        /// Adds a data point to the container
+        /// </summary>
+        /// <param name="dataPoint"></param>
         void Add(DataPointType dataPoint);
 
+        /// <summary>
+        /// Renames the specified component
+        /// </summary>
+        /// <param name="oldName">Old component name</param>
+        /// <param name="newName">New component name</param>
         void RenameComponent(string oldName, string newName);
     }
 }

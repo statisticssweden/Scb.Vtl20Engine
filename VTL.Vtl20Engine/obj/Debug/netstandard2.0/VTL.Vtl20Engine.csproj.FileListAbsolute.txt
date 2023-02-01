@@ -1,0 +1,10 @@
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\bin\Debug\netstandard2.0\VTL.Vtl20Engine.deps.json
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\bin\Debug\netstandard2.0\VTL.Vtl20Engine.dll
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\bin\Debug\netstandard2.0\VTL.Vtl20Engine.pdb
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\obj\Debug\netstandard2.0\VTL.Vtl20Engine.csproj.AssemblyReference.cache
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\obj\Debug\netstandard2.0\VTL.Vtl20Engine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\obj\Debug\netstandard2.0\VTL.Vtl20Engine.AssemblyInfoInputs.cache
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\obj\Debug\netstandard2.0\VTL.Vtl20Engine.AssemblyInfo.cs
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\obj\Debug\netstandard2.0\VTL.Vtl20Engine.csproj.CoreCompileInputs.cache
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\obj\Debug\netstandard2.0\VTL.Vtl20Engine.dll
+C:\Users\KONJOHN\source\repos\SCB.NRFiber\VTL\VTL.Vtl20Engine\obj\Debug\netstandard2.0\VTL.Vtl20Engine.pdb

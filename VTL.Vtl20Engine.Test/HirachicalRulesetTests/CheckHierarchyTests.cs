@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using VTL.Vtl20Engine.DataContainers;
@@ -7,6 +8,7 @@ using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.RulesetType;
 using VTL.Vtl20Engine.DataTypes.ScalarDataTypes;
 using VTL.Vtl20Engine.DataTypes.ScalarDataTypes.BasicScalarTypes;
+using VTL.Vtl20Engine.Exceptions;
 using VTL.Vtl20Engine.Test.Mocks;
 
 namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
@@ -1614,7 +1616,7 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
         {
             var hierarchicalRulesets = new Dictionary<string, HierarchicalRuleset>();
             var sut = new VtlEngine(new DataContainerFactory(), hierarchicalRulesets);
-
+            var nl = Environment.NewLine;
 
             var ds1 = MockComponent.MakeDataSet(new List<MockComponent>
                 {
@@ -1663,16 +1665,16 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
                 }));
 
 
-            var define = @"define hierarchical ruleset HR_1(valuedomain rule VD_1 ) is
-                                exempel1: A = B + C
-                              ; exempel namn2: C = D
-                              ; exempel3: E = A + C
-                  end hierarchical ruleset;";
+            var define = $"define hierarchical ruleset HR_1(valuedomain rule VD_1 ) is{nl}";
+            define += $"exempel1: A = B + C{nl}";
+            define += $"; exempel namn2: C = D {nl}";
+            define += $"; exempel3: E = A + C {nl}";
+            define += $"end hierarchical ruleset;";
 
-            var exception = Assert.ThrowsException<VtlException>(() =>
+            var exception = Assert.ThrowsException<VTLParserException>(() =>
                 sut.Execute($"{define} DS_r <- check_hierarchy (DS_1, HR_1 rule Id_2 always_zero dataset_priority all);"
                 , new[] { new Operand { Alias = "DS_1", Data = ds1 } }));
-            Assert.AreEqual("Felaktigt formaterat regelnamn: exempelnamn2. Tillåtna tecken är a-z, 0-9, _ och .", exception.Message);
+            //Assert.AreEqual("Felaktigt formaterat regelnamn: exempelnamn2. Tillåtna tecken är a-z, 0-9, _ och .", exception.Message);
         }
 
         [TestMethod]

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using VTL.Vtl20Engine.Contracts;
 using VTL.Vtl20Engine.DataContainers;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
@@ -91,8 +92,13 @@ namespace VTL.Vtl20Engine
             foreach (var statementContext in context.statement())
             {
                 if (statementContext == null)
-                {
+                { 
                     throw new Exception($"Kunde inte hantera VTL-kommandot {statementContext.GetText()}.");
+                }
+
+                if (statementContext.exception != null)
+                {
+                    throw new VTLParserException($"Kunde inte hantera VTL-kommandot {statementContext.GetText()}.", statementContext.exception); ;
                 }
             }
         }

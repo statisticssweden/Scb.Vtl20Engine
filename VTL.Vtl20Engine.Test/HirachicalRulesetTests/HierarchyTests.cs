@@ -21,8 +21,6 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
         [TestInitialize]
         public void TestSetup()
         {
-
-
             _define = @"define hierarchical ruleset HR_1(valuedomain rule VD_1 ) is
                                 A = J + K + L
                               ; B = M + N + O
@@ -60,8 +58,14 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
                               ; G = F - E
                               ; H = B - C - G
 
-                  end hierarchical ruleset; ";
+                  end hierarchical ruleset; 
+            
+                  define hierarchical ruleset HR_Bugg146491(valuedomain rule VD_Bugg146491 ) is
+                          A = H + M
 
+                  end hierarchical ruleset;
+
+";
 
             _ds1 = MockComponent.MakeDataSet(new List<MockComponent>
                 {
@@ -1271,6 +1275,28 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
                 Assert.AreEqual(new StringType("H"), dataPointEnumerator.Current[1]);
                 Assert.AreEqual(new NumberType(0), dataPointEnumerator.Current[2]);
             }
+        }
+
+        [TestMethod]
+        public void Hierarchy_Bugg146491_EmptyDataDataPoints()
+        {
+            var hierarchicalRulesets = new Dictionary<string, HierarchicalRuleset>();
+            var sut = new VtlEngine(new DataContainerFactory(), hierarchicalRulesets);
+
+            var vtlText = "Bt:=DS_1 [filter Id_1=\"2000\"];";
+            var DS_r = sut.Execute($"{_define} {vtlText} DS_r <- hierarchy (Bt, HR_Bugg146491 rule Id_2 always_zero computed);"
+                , new[] { new Operand { Alias = "DS_1", Data = _ds1 } }).FirstOrDefault(r => r.Alias.Equals("DS_r"));
+
+            var ruleset = hierarchicalRulesets["HR_Bugg146491"];
+            Assert.AreEqual("HR_Bugg146491", ruleset.Name);
+            var rules = ruleset.Rules.ToArray();
+            Assert.AreEqual(1, rules.Length);
+
+            var result = DS_r.GetValue() as DataSetType;
+            Assert.IsNotNull(result);
+
+            Assert.AreEqual(0, result.DataPointCount);
+
         }
     }
 }
