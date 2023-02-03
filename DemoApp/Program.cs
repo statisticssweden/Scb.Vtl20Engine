@@ -29,54 +29,61 @@ var init = true;
 
 do
 {
-    if (init)
+    try
     {
-        init = false;
-    }
-    else
-    {
-        // Execute parser
-        heap = engine.Execute(vtlCode, heap);
-    }
-
-    foreach (var op in heap)
-    {
-        Console.WriteLine(op.Alias);
-        
-        // GetValue performs calculation
-        var opValue = op.GetValue();
-
-        if (opValue is ScalarType scalar)
+        if (init)
         {
-            Console.WriteLine(scalar);
+            init = false;
+        }
+        else
+        {
+            // Execute parser
+            heap = engine.Execute(vtlCode, heap);
         }
 
-        // Print current state of data variables
-        if (opValue is DataSetType dataSet)
+        foreach (var op in heap)
         {
-            Console.Write(" ");
-            foreach (var component in dataSet.DataSetComponents)
+            Console.WriteLine(op.Alias);
+
+            // GetValue performs calculation
+            var opValue = op.GetValue();
+
+            if (opValue is ScalarType scalar)
             {
-                Console.Write($"{component.Name, 13}");
+                Console.WriteLine(scalar);
+            }
+
+            // Print current state of data variables
+            if (opValue is DataSetType dataSet)
+            {
+                Console.Write(" ");
+                foreach (var component in dataSet.DataSetComponents)
+                {
+                    Console.Write($"{component.Name,13}");
+                }
+                Console.WriteLine();
+                Console.WriteLine(new string('-', dataSet.DataSetComponents.Length * 13 + 2));
+
+                foreach (var dataPoint in dataSet.DataPoints)
+                {
+                    Console.Write("|");
+                    foreach (var scalarValue in dataPoint)
+                    {
+                        Console.Write($"{scalarValue,13}");
+                    }
+                    Console.Write("|");
+                    Console.WriteLine();
+                }
+                Console.WriteLine(new string('-', dataSet.DataSetComponents.Length * 13 + 2));
             }
             Console.WriteLine();
-            Console.WriteLine(new string('-', dataSet.DataSetComponents.Length * 13 + 2));
-
-            foreach (var dataPoint in dataSet.DataPoints)
-            {
-                Console.Write("|");
-                foreach (var scalarValue in dataPoint)
-                {
-                    Console.Write($"{scalarValue, 13}");
-                }
-                Console.Write("|");
-                Console.WriteLine();
-            }
-            Console.WriteLine(new string('-', dataSet.DataSetComponents.Length * 13 + 2));
         }
+    }
+    catch(Exception e)
+    {
+        Console.WriteLine(e.Message);
         Console.WriteLine();
     }
-
     Console.WriteLine("Enter VTL code: ");
     vtlCode = Console.ReadLine();
 }
