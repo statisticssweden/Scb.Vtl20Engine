@@ -30,13 +30,13 @@ The tree built by Antlr is traversed using an implementation of the visitor patt
             visitor.VisitStart(context);
 Visitor.VisitStart visits the start node with the entire parser tree as context. The VisitStart method checks which nodes are at the next level in the context tree and then visits its visitor methods with the corresponding subtree as context. The tree is traversed by calls to nested VTL commands. Finally, the leaves of the tree will initiate calls to visitor methods that retrieve constant values or values stored in variables on the heap. The example in the figure below basically shows how the expression DSr <- DS1 + DS2; would be processed.
 
-Operand
+## Operand
 An operand is an object that can be passed as an argument to a VTL function, an operator. It encapsulates a data object and holds some metadata needed for the calculation. Operands have three important properties: Alias is the name of the operand and is used to identify it. Persistent specifies whether the operand should be considered as a result of the VTL run. If it is not marked as persistent, it is not available outside the VLT engine. Finally, Operand has the Data property of the DataType data type. It can take the form of an Operator or a fixed value, either of a simple type (integer, string, etc.) or of a composite type (dataset, component, etc.).
 
-Operator
+## Operator
 An operator performs a specific function, often a calculation. It always returns a data object (DataType) as a result, but depending on the function, it takes a varying number of operands and control parameters as arguments.
 
-DataType
+## DataType
 DataType is the base class for all data handling in the VTL engine. It enables a very flexible handling of nested calls. Arguments to an operator can just as well be other operators such as simple data types or datasets. This structure is taken directly from the VTL documentation, see VTL user manual page 49. See also the figure below.
 
 # Execution
