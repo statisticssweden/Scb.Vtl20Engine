@@ -431,13 +431,13 @@ namespace VTL.Vtl20Engine.Test.JoinOperatorTests
 
             Assert.AreEqual(7, result.DataSetComponents.Length);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var id_3 = result.OriginalIndexOfComponent("Id_3");
-            var me_1 = result.OriginalIndexOfComponent("Me_1");
-            var me_2 = result.OriginalIndexOfComponent("Me_2");
-            var me_1a = result.OriginalIndexOfComponent("Me_1A");
-            var me_2a = result.OriginalIndexOfComponent("Me_2A");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var id_3 = Array.IndexOf(result.ComponentSortOrder, "Id_3");
+            var me_1 = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+            var me_2 = Array.IndexOf(result.ComponentSortOrder, "Me_2");
+            var me_1a = Array.IndexOf(result.ComponentSortOrder, "Me_1A");
+            var me_2a = Array.IndexOf(result.ComponentSortOrder, "Me_2A");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -612,12 +612,12 @@ namespace VTL.Vtl20Engine.Test.JoinOperatorTests
 
             Assert.AreEqual(6, result.DataSetComponents.Length);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var me_1 = result.OriginalIndexOfComponent("Me_1");
-            var me_1A = result.OriginalIndexOfComponent("Me_1A");
-            var me_2 = result.OriginalIndexOfComponent("Me_2");
-            var me_2A = result.OriginalIndexOfComponent("Me_2A");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var me_1 = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+            var me_1A = Array.IndexOf(result.ComponentSortOrder, "Me_1A");
+            var me_2 = Array.IndexOf(result.ComponentSortOrder, "Me_2");
+            var me_2A = Array.IndexOf(result.ComponentSortOrder, "Me_2A");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -653,12 +653,12 @@ namespace VTL.Vtl20Engine.Test.JoinOperatorTests
 
             Assert.AreEqual(6, result.DataSetComponents.Length);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var me_1 = result.OriginalIndexOfComponent("Me_1");
-            var me_1A = result.OriginalIndexOfComponent("Me_1A");
-            var me_2 = result.OriginalIndexOfComponent("Me_2");
-            var me_2A = result.OriginalIndexOfComponent("Me_2A");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var me_1 = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+            var me_1A = Array.IndexOf(result.ComponentSortOrder, "Me_1A");
+            var me_2 = Array.IndexOf(result.ComponentSortOrder, "Me_2");
+            var me_2A = Array.IndexOf(result.ComponentSortOrder, "Me_2A");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {

@@ -29,7 +29,6 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
                     {
                         throw new Exception($"{translation.Item2} finns redan i datasetet.");
                     }
-
                     if (translation.Item2.Length > Constants.MAX_COMPONENT_NAME_LENGTH)
                     {
                         throw new Exception(
@@ -39,6 +38,11 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
                     var components = result.DataSetComponents.Where(c => c.Name.Equals(translation.Item1)).ToArray();
                     var componentNames = result.DataSetComponents.Select(c => c.Name).ToArray();
 
+                    if(!string.Equals(translation.Item1, translation.Item2, StringComparison.OrdinalIgnoreCase) &&
+                        result.ComponentSortOrder.Contains(translation.Item2, StringComparer.OrdinalIgnoreCase))
+                    {
+                        throw new Exception($"Kan inte döpa om komponenten {translation.Item1} till {translation.Item2} eftersom en komponent med det namnet redan finns i datasetet.");
+                    }
                     if (components.Length == 1)
                     {
                         result.RenameComponent(translation.Item1, translation.Item2);

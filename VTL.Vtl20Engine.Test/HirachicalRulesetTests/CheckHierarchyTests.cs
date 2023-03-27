@@ -161,13 +161,13 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
             Assert.IsNotNull(result);
             Assert.AreEqual(11, result.DataPointCount);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var ruleid = result.OriginalIndexOfComponent("ruleid");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var ruleid = Array.IndexOf(result.ComponentSortOrder, "ruleid");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -653,13 +653,13 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
 
             var result = DS_r.GetValue() as DataSetType;
 
-            var a_row_number = result.OriginalIndexOfComponent("A_row_number");
-            var nr_Referensperiod = result.OriginalIndexOfComponent("NR_Referensperiod");
-            var ruleid = result.OriginalIndexOfComponent("ruleid");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var a_row_number = Array.IndexOf(result.ComponentSortOrder, "A_row_number");
+            var nr_Referensperiod = Array.IndexOf(result.ComponentSortOrder, "NR_Referensperiod");
+            var ruleid = Array.IndexOf(result.ComponentSortOrder, "ruleid");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -954,13 +954,13 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
             Assert.IsNotNull(result);
             Assert.AreEqual(2, result.DataPointCount);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var me_1 = result.OriginalIndexOfComponent("Me_1");
-            var ruleid = result.OriginalIndexOfComponent("ruleid");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var me_1 = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+            var ruleid = Array.IndexOf(result.ComponentSortOrder, "ruleid");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -1130,14 +1130,14 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
             Assert.IsNotNull(result);
             Assert.AreEqual(11, result.DataPointCount);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var me_1 = result.OriginalIndexOfComponent("Me_1");
-            var ruleid = result.OriginalIndexOfComponent("ruleid");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var me_1 = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+            var ruleid = Array.IndexOf(result.ComponentSortOrder, "ruleid");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -1499,13 +1499,13 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
             Assert.IsNotNull(result);
             Assert.AreEqual(11, result.DataPointCount);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var ruleid = result.OriginalIndexOfComponent("ruleid");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var ruleid = Array.IndexOf(result.ComponentSortOrder, "ruleid");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -1822,14 +1822,14 @@ namespace VTL.Vtl20Engine.Test.HirachicalRulesetTests
             Assert.IsNotNull(result);
             Assert.AreEqual(11, result.DataPointCount);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var me_1 = result.OriginalIndexOfComponent("Me_1");
-            var ruleid = result.OriginalIndexOfComponent("ruleid");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var me_1 = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+            var ruleid = Array.IndexOf(result.ComponentSortOrder, "ruleid");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {

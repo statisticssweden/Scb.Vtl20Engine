@@ -40,15 +40,17 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.SetOperator
 
         internal override DataType PerformCalculation()
         {
-            if (Operands.FirstOrDefault()?.GetValue() is DataSetType ds1)
+            var values = Operands.AsParallel().Select(o => o.GetValue()).ToArray();
+
+            if (values.FirstOrDefault() is DataSetType ds1)
             {
                 var numIdentifiers = ds1.DataSetComponents.Count(c => c.Role == ComponentType.ComponentRole.Identifier);
                 var dataPointComparer = new DataPointComparer(Enumerable.Range(0, numIdentifiers).ToArray());
 
-                for (int i = 1; i < Operands.Count(); i++)
+                for (int i = 1; i < values.Count(); i++)
                 {
                     var preResult = new DataSetType(ds1.DataSetComponents);
-                    if (Operands[i].GetValue() is DataSetType ds2)
+                    if (values[i] is DataSetType ds2)
                     {
                         if (ds1.DataSetComponents.Length != ds2.DataSetComponents.Length ||
                             !ds1.DataSetComponents.All(c => ds2.DataSetComponents.Contains(c)))
@@ -78,9 +80,9 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.SetOperator
                             while (ds1EnumeratorHasValue || ds2EnumeratorHasValue)
                             {
                                 var ds1datapoint =
-                                    ds1EnumeratorHasValue ? ds1Enumerator.Current as DataPointType : null;
+                                    ds1EnumeratorHasValue ? ds1Enumerator.Current : null;
                                 var ds2datapoint =
-                                    ds2EnumeratorHasValue ? ds2Enumerator.Current as DataPointType : null;
+                                    ds2EnumeratorHasValue ? ds2Enumerator.Current : null;
                                 var obj = PerformCalculation(ds1datapoint, ds2datapoint, dataPointComparer);
                                 if (obj != null)
                                 {

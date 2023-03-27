@@ -17,6 +17,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes
             _componentName = componentName;
         }
 
+
         internal override DataType PerformCalculation()
         {
             if (_operand.GetValue() is DataSetType dataSet)

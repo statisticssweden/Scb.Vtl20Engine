@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VTL.Vtl20Engine.Comparers;
 using VTL.Vtl20Engine.DataContainers;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
@@ -152,6 +153,39 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.Hierarchical
             var dataPointEnumerator = dataSet.DataPoints.GetEnumerator();
             DataPointType lastDataPoint = null;
             var partition = new List<DataPointType>();
+            /*
+            var addlock = new object();
+            while (dataPointEnumerator.MoveNext())
+            {
+                var currentDataPoint = dataPointEnumerator.Current as DataPointType;
+                if (currentDataPoint == null) continue;
+
+                // Är vi fortfarande i samma partition d.v.s.
+                // har den nya datapunkten andra identifiers än den förra?
+                if (lastDataPoint != null && !SameIdentifiers(currentDataPoint, lastDataPoint, ruleComponentIndex))
+                {
+                    lock (addlock)
+                    {
+                        Parallel.ForEach(
+                        PerformCalculation(partition, ruleComponentIndex, valueComponentIndex, resultStructure),
+                        dp => resultDataPoints.Add(dp));
+                    }
+
+                    partition = new List<DataPointType>();
+                }
+
+                lastDataPoint = currentDataPoint;
+                partition.Add(currentDataPoint);
+            }
+
+            lock (addlock)
+            {
+                Parallel.ForEach(
+                PerformCalculation(partition, ruleComponentIndex, valueComponentIndex, resultStructure),
+                dp => resultDataPoints.Add(dp));
+            }
+            */
+
 
             while (dataPointEnumerator.MoveNext())
             {

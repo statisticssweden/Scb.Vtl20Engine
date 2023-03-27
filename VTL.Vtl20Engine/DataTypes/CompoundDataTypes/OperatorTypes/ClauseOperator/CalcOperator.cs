@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VTL.Vtl20Engine.Comparers;
 using VTL.Vtl20Engine.DataContainers;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
 using VTL.Vtl20Engine.DataTypes.ScalarDataTypes;
@@ -34,16 +33,26 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
 
         internal override DataType PerformCalculation()
         {
-            var dataSet = InOperand.GetValue() as DataSetType;
+
+            var inOperands = new List<Operand> { InOperand };
+            foreach(var c in ComponentOperands)
+            {
+                inOperands.Add(c);
+            }
+
+            var inValues = inOperands.AsParallel().Select(x => x.GetValue()).ToArray();
+
+            var dataSet = inValues[0] as DataSetType;
+
             if (dataSet == null)
             {
                 throw new Exception("Calc kan bara utföras på dataset.");
             }
-            foreach (var componentOperand in ComponentOperands)
+            for (var i = 0; i < ComponentOperands.Length; i++)
             {
                 ComponentType component = null;
-
-                var value = componentOperand.GetValue();
+                var alias = ComponentOperands[i].Alias;
+                var value = inValues[i + 1];
 
                 if (value is ScalarType scalartType)
                 {
@@ -75,16 +84,16 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
 
                     dataSetType.SortDataPoints();
 
-                    if (dataSetType.DataSetComponents.Any(c => c.Name.Equals(componentOperand.Alias)))
+                    if (dataSetType.DataSetComponents.Any(c => c.Name.Equals(alias)))
                     {
                         component = dataSetType.DataSetComponents.FirstOrDefault(c =>
-                            c.Name.Equals(componentOperand.Alias));
+                            c.Name.Equals(alias));
                     }
                     else if (dataSetType.DataSetComponents.Any(c =>
-                            c.Name.Substring(c.Name.IndexOf("#") + 1).Equals(componentOperand.Alias)))
+                            c.Name.Substring(c.Name.IndexOf("#") + 1).Equals(alias)))
                     {
                         component = dataSetType.DataSetComponents.FirstOrDefault(c =>
-                            c.Name.Substring(c.Name.IndexOf("#") + 1).Equals(componentOperand.Alias));
+                            c.Name.Substring(c.Name.IndexOf("#") + 1).Equals(alias));
                     }
                     else if (dataSetType.DataSetComponents.Count(c =>
                             c.Role == ComponentType.ComponentRole.Measure) == 1)
@@ -100,21 +109,21 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
 
                 if (component == null)
                 {
-                    throw new Exception($"Kunde inte hitta komponenten {componentOperand.Alias}");
+                    throw new Exception($"Kunde inte hitta komponenten {alias}");
                 }
 
-                component.Role = componentOperand.Role;
+                component.Role = ComponentOperands[i].Role;
 
-                if (component._ComponentDataHandler.Length == 1)
+                if (component.ComponentDataHandler.Length == 1)
                 {
-                    var enumerator = component._ComponentDataHandler.GetEnumerator();
+                    var enumerator = component.ComponentDataHandler.GetEnumerator();
                     enumerator.MoveNext();
-                    component._ComponentDataHandler = new ConstantComponentContainer(enumerator.Current);
+                    component.ComponentDataHandler = new ConstantComponentContainer(enumerator.Current);
                 }
 
                 if (component.Role == null) component.Role = ComponentType.ComponentRole.Measure;
 
-                component.Name = componentOperand.Alias;
+                component.Name = alias;
                 dataSet.SetDataSetComponent(component);
             }
 

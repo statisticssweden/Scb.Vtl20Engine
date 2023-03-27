@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
 using VTL.Vtl20Engine.DataTypes.ScalarDataTypes.BasicScalarTypes;
 
@@ -18,14 +19,30 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
 
         internal override DataType PerformCalculation()
         {
-            var dataSet = InOperand.GetValue() as DataSetType;
+            DataSetType dataSet = null;
+            DataType condition = null;
+            Parallel.Invoke(
+                () => dataSet = InOperand.GetValue() as DataSetType,
+                () => condition = ConditionOperand.GetValue());
 
             if (dataSet == null)
             {
                 throw new Exception($"{InOperand.Alias} kändes inte igen.");
             }
+
+            if (condition is BooleanType booleanScalar)
+            {
+                if (booleanScalar == true)
+                {
+                    return new DataSetType(dataSet);
+                }
+                else
+                {
+                    return new DataSetType(dataSet.DataSetComponents);
+                }
+            }
+
             var result = new DataSetType(dataSet.DataSetComponents);
-            var condition = ConditionOperand.GetValue();
             using (var dataSetEnumerator = dataSet.DataPoints.GetEnumerator())
             {
 

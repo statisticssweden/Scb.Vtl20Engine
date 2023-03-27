@@ -219,7 +219,7 @@ namespace VTL.Vtl20Engine.DataContainers
             }
         }
 
-        public void Flush()
+        public void CompleteWrite()
         {
         }
     }

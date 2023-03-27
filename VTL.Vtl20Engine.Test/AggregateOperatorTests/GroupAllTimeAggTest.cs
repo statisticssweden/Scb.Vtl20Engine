@@ -115,22 +115,26 @@ namespace VTL.Vtl20Engine.Test.AggregateOperatorTests
                 .FirstOrDefault(r => r.Alias.Equals("DS_r"));
             var result = dsr.GetValue() as DataSetType;
 
+            var Id_1index = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var Id_2index = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var Me_1index = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("A"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(60), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("A"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(60), dataPointEnumerator.Current[Me_1index]);
 
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("B"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(100), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("B"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(100), dataPointEnumerator.Current[Me_1index]);
 
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("C"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(20), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("C"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(20), dataPointEnumerator.Current[Me_1index]);
 
                 Assert.IsFalse(dataPointEnumerator.MoveNext());
             }
@@ -234,22 +238,26 @@ namespace VTL.Vtl20Engine.Test.AggregateOperatorTests
                 .FirstOrDefault(r => r.Alias.Equals("DS_r"));
             var result = dsr.GetValue() as DataSetType;
 
+            var Id_1index = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var Id_2index = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var Me_1index = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("A"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(30), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("A"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(30), dataPointEnumerator.Current[Me_1index]);
 
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("B"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(60), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("B"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(60), dataPointEnumerator.Current[Me_1index]);
 
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("C"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(20), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("C"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(20), dataPointEnumerator.Current[Me_1index]);
 
                 Assert.IsFalse(dataPointEnumerator.MoveNext());
             }
@@ -353,22 +361,26 @@ namespace VTL.Vtl20Engine.Test.AggregateOperatorTests
                 .FirstOrDefault(r => r.Alias.Equals("DS_r"));
             var result = dsr.GetValue() as DataSetType;
 
+            var Id_1index = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var Id_2index = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var Me_1index = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("A"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(20), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("A"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(20), dataPointEnumerator.Current[Me_1index]);
 
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("B"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(50), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("B"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(50), dataPointEnumerator.Current[Me_1index]);
 
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("C"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(10), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("C"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(10), dataPointEnumerator.Current[Me_1index]);
 
                 Assert.IsFalse(dataPointEnumerator.MoveNext());
             }
@@ -472,22 +484,26 @@ namespace VTL.Vtl20Engine.Test.AggregateOperatorTests
                 .FirstOrDefault(r => r.Alias.Equals("DS_r"));
             var result = dsr.GetValue() as DataSetType;
 
+            var Id_1index = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var Id_2index = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var Me_1index = Array.IndexOf(result.ComponentSortOrder, "Me_1");
+
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("A"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(40), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("A"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(40), dataPointEnumerator.Current[Me_1index]);
 
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("B"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(70), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("B"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(70), dataPointEnumerator.Current[Me_1index]);
 
                 dataPointEnumerator.MoveNext();
-                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[0]);
-                Assert.AreEqual(new StringType("C"), dataPointEnumerator.Current[1]);
-                Assert.AreEqual(new IntegerType(30), dataPointEnumerator.Current[2]);
+                Assert.AreEqual(new TimePeriodType(2010, Duration.Annual, 0), dataPointEnumerator.Current[Id_1index]);
+                Assert.AreEqual(new StringType("C"), dataPointEnumerator.Current[Id_2index]);
+                Assert.AreEqual(new IntegerType(30), dataPointEnumerator.Current[Me_1index]);
 
                 Assert.IsFalse(dataPointEnumerator.MoveNext());
             }

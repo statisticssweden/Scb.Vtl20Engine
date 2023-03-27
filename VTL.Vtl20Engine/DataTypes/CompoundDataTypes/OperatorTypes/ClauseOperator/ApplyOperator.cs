@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
 
 namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperator
@@ -21,7 +22,12 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
         {
             var components = new List<ComponentType>();
 
-            if (_operand.GetValue() is DataSetType ds && _apply.GetValue() is ComponentType cp)
+            DataType operand = null, apply = null;
+            Parallel.Invoke(
+                () => operand = _operand.GetValue(),
+                () => apply = _apply.GetValue());
+
+            if (operand is DataSetType ds && apply is ComponentType cp)
             {
                 foreach (var dsc in ds.DataSetComponents)
                 {

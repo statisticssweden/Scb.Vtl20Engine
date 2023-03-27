@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VTL.Vtl20Engine.DataContainers;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
 using VTL.Vtl20Engine.DataTypes.ScalarDataTypes;
@@ -22,42 +23,45 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ConditionalO
 
         internal override DataType PerformCalculation()
         {
-            var conditionValue = _condition.GetValue();
+            DataType conditionValue = null, thenValue = null, elseValue = null;
+
+            Parallel.Invoke(
+                () => conditionValue = _condition.GetValue(),
+                () => thenValue = _thenOperand.GetValue(),
+                () => elseValue = _elseOperand.GetValue());
+
             if (conditionValue is BooleanType booleanCondition)
             {
-                return PerformCalculation(booleanCondition);
+                return PerformCalculation(booleanCondition, thenValue, elseValue);
             }
 
             if (conditionValue is ComponentType componentCondition)
             {
-                return PerformCalculation(componentCondition);
+                return PerformCalculation(componentCondition, thenValue, elseValue);
             }
 
             if (conditionValue is DataSetType dataSetCondition)
             {
-                return PerformCalculation(dataSetCondition);
+                return PerformCalculation(dataSetCondition, thenValue, elseValue);
             }
 
             throw new NotImplementedException();
         }
 
-        internal DataType PerformCalculation(BooleanType booleanCondition)
+        internal DataType PerformCalculation(BooleanType booleanCondition, DataType thenValue, DataType elseValue)
         {
             if (booleanCondition == true)
             {
-                return _thenOperand.GetValue();
+                return thenValue;
             }
             else
             {
-                return _elseOperand.GetValue();
+                return elseValue;
             }
         }
 
-        private DataType PerformCalculation(ComponentType conditionComponent)
+        private DataType PerformCalculation(ComponentType conditionComponent, DataType thenValue, DataType elseValue)
         {
-            var thenValue = _thenOperand.GetValue();
-            var elseValue = _elseOperand.GetValue();
-
             var componentType = thenValue is ComponentType ? thenValue as ComponentType : elseValue as ComponentType;
             if (componentType == null)
             {
@@ -65,7 +69,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ConditionalO
             }
             
             var result = new ComponentType(componentType);
-            result._ComponentDataHandler = VtlEngine.DataContainerFactory.CreateComponentContainer(conditionComponent.Length);
+            result.ComponentDataHandler = VtlEngine.DataContainerFactory.CreateComponentContainer(conditionComponent.Length);
 
             var thenEnumerator = thenValue is ComponentType thenComponent ? thenComponent.GetEnumerator() : null;
             var thenScalar = thenValue as ScalarType;
@@ -110,10 +114,8 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ConditionalO
         private ComponentType[] _resultComponents;
         private int _condIndex;
 
-        private DataType PerformCalculation(DataSetType conditionDataSet)
+        private DataType PerformCalculation(DataSetType conditionDataSet, DataType thenValue, DataType elseValue)
         {
-            var thenValue = _thenOperand.GetValue();
-            var elseValue = _elseOperand.GetValue();
             var thenDataSet = thenValue as DataSetType;
             var elseDataSet = elseValue as DataSetType;
             var thenScalar = thenValue as ScalarType;

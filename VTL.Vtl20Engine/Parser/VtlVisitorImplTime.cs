@@ -62,6 +62,16 @@ namespace VTL.Vtl20Engine.Parser
             return new Operand() { Data = new FillTimeSeries(op, single) };
         }
 
+        public override Operand VisitCurrentDateAtomComponent([NotNull] VtlParser.CurrentDateAtomComponentContext context)
+        {
+            return new Operand() { Data = new CurrentDate() };
+        }
+
+        public override Operand VisitCurrentDateAtom([NotNull] VtlParser.CurrentDateAtomContext context)
+        {
+            return new Operand() { Data = new CurrentDate() };
+        }
+
         private Duration? GetPeriodIndicator(string s)
         {
             switch (s.ToUpper())

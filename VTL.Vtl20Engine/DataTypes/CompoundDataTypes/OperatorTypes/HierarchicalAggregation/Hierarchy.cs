@@ -172,6 +172,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.Hierarchical
             {
                 resultDataPoints.Add(dp);
             }
+            resultDataPoints.CompleteWrite();
 
             if (_output == OutputModeHierarchy.All)
             {

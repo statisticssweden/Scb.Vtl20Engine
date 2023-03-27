@@ -131,16 +131,17 @@ namespace VTL.Vtl20Engine.Test.ComparisonOperatorTests
             var DS_r = sut.Execute("DS_r <- DS_1 [calc Me_3 := isnull(Nummer) ];", new[] { _ds_1 }).FirstOrDefault(r => r.Alias.Equals("DS_r"));
             var result = DS_r.GetValue() as DataSetType;
             Assert.AreEqual(result.DataSetComponents[1].Name, "Me_3");
+            var me3Index = result.IndexOfComponent("Me_3");
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
                 dataPointEnumerator.MoveNext();
-                var value1 = dataPointEnumerator.Current[1];
+                var value1 = dataPointEnumerator.Current[me3Index];
                 Assert.AreEqual(value1, new BooleanType(false));
                 dataPointEnumerator.MoveNext();
-                var value2 = dataPointEnumerator.Current[1];
+                var value2 = dataPointEnumerator.Current[me3Index];
                 Assert.AreEqual(value2, new BooleanType(true));
                 dataPointEnumerator.MoveNext();
-                var value3 = dataPointEnumerator.Current[1];
+                var value3 = dataPointEnumerator.Current[me3Index];
                 Assert.AreEqual(value3, new BooleanType(false));
             }
         }

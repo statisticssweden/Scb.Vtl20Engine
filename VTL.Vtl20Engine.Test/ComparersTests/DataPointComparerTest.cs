@@ -137,5 +137,31 @@ namespace VTL.Vtl20Engine.Test.ComparersTests
             Assert.AreEqual(1, one.CompareTo(minus));
             Assert.AreEqual(0, one.CompareTo(one));
         }
+
+        // Ska motsvara collate Latin1_General_BIN
+        [TestMethod]
+        public void DataPointComparer_CompareStrings()
+        {
+            var array = new[]
+            {
+                new StringType("CP06"),
+                new StringType("_Z"),
+                new StringType("cp07"),
+                new StringType("CP02"),
+                new StringType("_X"),
+                new StringType("CP07")
+            };
+
+            Array.Sort(array);
+
+            Assert.AreEqual("CP02", array[0].ToString());
+            Assert.AreEqual("CP06", array[1].ToString());
+            Assert.AreEqual("CP07", array[2].ToString());
+            Assert.AreEqual("_X", array[3].ToString());
+            Assert.AreEqual("_Z", array[4].ToString());
+            Assert.AreEqual("cp07", array[5].ToString());
+
+            Assert.IsTrue(array[0].CompareTo(array[2]) < 0);
+        }
     }
 }

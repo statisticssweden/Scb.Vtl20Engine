@@ -18,19 +18,27 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
 
         internal override DataType PerformCalculation()
         {
-            var dataSet = InOperand.GetValue() as DataSetType;
+            var inOperands = new List<Operand> { InOperand };
+            foreach (var c in ComponentOperands)
+            {
+                inOperands.Add(c);
+            }
 
-            if(dataSet == null)
+            var inValues = inOperands.AsParallel().Select(x => x.GetValue()).ToArray();
+
+            var dataSet = inValues[0] as DataSetType;
+
+            if (dataSet == null)
             {
                 throw new Exception("Keep kan bara utföras på dataset.");
             }
             var componentList = dataSet.DataSetComponents
                 .Where(c => c.Role == ComponentType.ComponentRole.Identifier).ToList();
-            foreach (var componentOperand in ComponentOperands)
+            for (var i = 0; i < ComponentOperands.Length; i++)
             {
                 ComponentType component = null;
-
-                var value = componentOperand.GetValue();
+                var alias = ComponentOperands[i].Alias;
+                var value = inValues[i + 1];
 
                 if (value is ComponentType componentType)
                 {
@@ -40,18 +48,18 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
                 if (value is DataSetType dataSetType)
                 {
                     component = 
-                        dataSetType.DataSetComponents.FirstOrDefault(c => c.Name.Equals(componentOperand.Alias)) ??
-                        dataSetType.DataSetComponents.FirstOrDefault(c => c.Name.Substring(c.Name.IndexOf("#") + 1).Equals(componentOperand.Alias));
+                        dataSetType.DataSetComponents.FirstOrDefault(c => c.Name.Equals(alias)) ??
+                        dataSetType.DataSetComponents.FirstOrDefault(c => c.Name.Substring(c.Name.IndexOf("#") + 1).Equals(alias));
                 }
                     
                 if (component == null)
                 {
-                    throw new Exception($"Kunde inte hitta komponenten {componentOperand.Alias}");
+                    throw new Exception($"Kunde inte hitta komponenten {alias}");
                 }
 
                 if (component.Role == ComponentType.ComponentRole.Identifier)
                 {
-                    throw new Exception($"Det ät otillåtet att utföra keep med komponenten {componentOperand.Alias} eftersom den är en identifierare.");
+                    throw new Exception($"Det ät otillåtet att utföra keep med komponenten {alias} eftersom den är en identifierare.");
                 }
 
                 componentList.Add(component);

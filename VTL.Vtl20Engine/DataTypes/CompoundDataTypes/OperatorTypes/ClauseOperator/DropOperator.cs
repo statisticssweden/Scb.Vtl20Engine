@@ -44,18 +44,26 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
 
         internal override DataType PerformCalculation()
         {
-            var dataSet = InOperand.GetValue() as DataSetType;
+            var inOperands = new List<Operand> { InOperand };
+            foreach (var c in ComponentOperands)
+            {
+                inOperands.Add(c);
+            }
 
-            if(dataSet == null)
+            var inValues = inOperands.AsParallel().Select(x => x.GetValue()).ToArray();
+
+            var dataSet = inValues[0] as DataSetType;
+
+            if (dataSet == null)
             {
                 throw new Exception("Drop kan bara utföras på dataset.");
             }
             var componentList = dataSet.DataSetComponents.ToList();
-            foreach (var componentOperand in ComponentOperands)
+            for (var i = 0; i < ComponentOperands.Length; i++)
             {
                 ComponentType component = null;
-
-                var value = componentOperand.GetValue();
+                var alias = ComponentOperands[i].Alias;
+                var value = inValues[i + 1];
 
                 if (value is ComponentType componentType)
                 {
@@ -63,20 +71,20 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.ClauseOperat
                 }
                 else if (value is DataSetType dataSetType)
                 {
-                    component = dataSetType.DataSetComponents.FirstOrDefault(c => c.Name.Equals(componentOperand.Alias));
+                    component = dataSetType.DataSetComponents.FirstOrDefault(c => c.Name.Equals(alias));
                 }
-                else if (!string.IsNullOrEmpty(componentOperand.Alias))
+                else if (!string.IsNullOrEmpty(alias))
                 {
-                    component = dataSet.GetDataSetComponent(componentOperand.Alias);
+                    component = dataSet.GetDataSetComponent(alias);
                 }
 
                 if (component == null)
                 {
-                    throw new Exception($"Kunde inte hitta komponenten {componentOperand.Alias}");
+                    throw new Exception($"Kunde inte hitta komponenten {alias}");
                 }
                 if (component.Role == ComponentType.ComponentRole.Identifier)
                 {
-                    throw new Exception($"Det ät otillåtet att utföra drop med komponenten {componentOperand.Alias} eftersom den är en identifierare.");
+                    throw new Exception($"Det ät otillåtet att utföra drop med komponenten {alias} eftersom den är en identifierare.");
                 }
                 componentList.Remove(component);
             }

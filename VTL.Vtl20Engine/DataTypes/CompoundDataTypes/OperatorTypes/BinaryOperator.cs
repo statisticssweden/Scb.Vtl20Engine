@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using VTL.Vtl20Engine.Comparers;
 using VTL.Vtl20Engine.DataContainers;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
@@ -256,8 +257,10 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes
 
         internal override DataType PerformCalculation()
         {
-            var operand1 = Operand1.GetValue();
-            var operand2 = Operand2.GetValue();
+            DataType operand1 = null, operand2 = null;
+            Parallel.Invoke(
+                () => operand1 = Operand1.GetValue(),
+                () => operand2 = Operand2.GetValue());
 
             // Both operands are datasets
             var dataSet1 = operand1 as DataSetType;

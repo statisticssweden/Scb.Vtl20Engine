@@ -10,7 +10,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
 {
     public class ComponentType : CompoundType, IEnumerable<ScalarType>
     {
-        public IComponentContainer _ComponentDataHandler;
+        public IComponentContainer ComponentDataHandler;
 
         public ComponentType(Type t, IComponentContainer componentDataHandler)
         {
@@ -21,7 +21,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
 
             DataType = t;
 
-            _ComponentDataHandler = componentDataHandler;
+            ComponentDataHandler = componentDataHandler;
         }
 
         public ComponentType(ComponentType component)
@@ -29,10 +29,10 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
             Name = component.Name;
             Role = component.Role;
             DataType = component.DataType;
-            _ComponentDataHandler = VtlEngine.DataContainerFactory.CreateComponentContainer(component.Length);
+            ComponentDataHandler = VtlEngine.DataContainerFactory.CreateComponentContainer(component.Length);
             foreach(var datum in component)
             {
-                _ComponentDataHandler.Add(datum);
+                ComponentDataHandler.Add(datum);
             }
         }
 
@@ -45,10 +45,10 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
         internal void Rename(string newName)
         {
             Name = newName;
-            _ComponentDataHandler.Rename(newName);
+            ComponentDataHandler.Rename(newName);
         }
 
-        public int Length => _ComponentDataHandler.Length;
+        public int Length => ComponentDataHandler.Length;
 
         public override bool Equals(object obj)
         {
@@ -90,7 +90,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
 
         public IEnumerator<ScalarType> GetEnumerator()
         {
-            return _ComponentDataHandler.GetEnumerator();
+            return ComponentDataHandler.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -100,7 +100,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
 
         public void Add(ScalarType scalar)
         {
-            _ComponentDataHandler.Add(scalar);
+            ComponentDataHandler.Add(scalar);
         }
     }
 }

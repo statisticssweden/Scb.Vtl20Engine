@@ -32,17 +32,18 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
         {
             if (_result == null)
             {
-                var operands = new List<DataType>();
-                foreach (var operand in _operand)
+                var args = _operand.AsParallel().Select(x => x.GetValue()).ToArray();
+
+                var aliases = _operand.Select(o => o.Alias).ToArray();
+
+                for (int i = 0; i < args.Length; i++)
                 {
-                    var op = operand.GetValue();
-                    if (op == null)
+                    if (args[i] == null)
                     {
-                        throw new Exception($"{operand.Alias} är en okänd variabel.");
+                        throw new Exception($"{aliases[i]} är en okänd variabel.");
                     }
-                    operands.Add(op);
                 }
-                _result = _exteranlFunctionExecutor.Execute(_externaRoutineName, operands, "");
+                _result = _exteranlFunctionExecutor.Execute(_externaRoutineName, args, "");
             }
             return _result;
         }

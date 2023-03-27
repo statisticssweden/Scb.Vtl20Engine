@@ -147,6 +147,8 @@ namespace VTL.Vtl20Engine.Test.ClauseOperatorTests
 
             var result = DS_r.GetValue() as DataSetType;
 
+            Assert.AreEqual(4, result.DataPointCount);
+
             Assert.AreEqual(typeof(StringType), result.DataSetComponents[0].DataType);
             Assert.AreEqual("MeasName", result.DataSetComponents[0].Name);
             Assert.AreEqual(ComponentType.ComponentRole.Identifier, result.DataSetComponents[0].Role);

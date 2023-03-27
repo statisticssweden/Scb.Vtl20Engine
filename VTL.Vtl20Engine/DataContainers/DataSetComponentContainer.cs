@@ -75,5 +75,9 @@ namespace VTL.Vtl20Engine.DataContainers
                 _dataPointContainer.Dispose();
             }
         }
+
+        public void CompleteWrite()
+        {
+        }
     }
 }

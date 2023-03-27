@@ -167,6 +167,7 @@
     <Compile Include="StringOperatorTests\LengthTests.cs" />
     <Compile Include="StringOperatorTests\SubstringTest.cs" />
     <Compile Include="TimeOperatorTests\TimeAggTest.cs" />
+    <Compile Include="TimeOperatorTests\CurrentDateTest.cs" />
     <Compile Include="TimeOperatorTests\TimeTest.cs" />
     <Compile Include="TimeOperatorTests\TimePeriodTest.cs" />
     <Compile Include="TimeOperatorTests\TimeShiftTest.cs" />

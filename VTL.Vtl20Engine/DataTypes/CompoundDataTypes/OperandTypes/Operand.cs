@@ -7,6 +7,8 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes
 {
     public class Operand : IDisposable
     {
+        private readonly object _executeLock = new object();
+
         public string Alias { get; set; }
 
         public ParserRuleContext Source { get; set; }
@@ -25,41 +27,63 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes
             {
                 if (_result == null)
                 {
-                    if(Data is Operator op)
+                    lock (_executeLock)
                     {
-                        _result = op.PerformCalculationWithLog();
-                        if(string.IsNullOrEmpty(Alias))
+                        if (_result == null)
                         {
-                            Data.Dispose();
-                        }
-                    }
-                    else
-                    {
-                        _result = Data;
-                    }
-                    if (_result is ComponentType comp && Role != null)
-                    {
-                        comp.Role = Role;
-                    }
+                            if (Data is Operator op)
+                            {
+                                _result = op.PerformCalculationWithLog();
+                                if(_result is DataSetType dsr)
+                                {
+                                    dsr.DataPoints.CompleteWrite();
+                                }
+                                if(_result is ComponentType cr)
+                                {
+                                    cr.ComponentDataHandler.CompleteWrite();
+                                }
+                                if (string.IsNullOrEmpty(Alias))
+                                {
+                                    Data.Dispose();
+                                }
+                            }
+                            else
+                            {
+                                _result = Data;
+                            }
+                            if (_result is ComponentType comp && Role != null)
+                            {
+                                comp.Role = Role;
+                            }
 
-                    if (_result is DataSetType ds)
-                    {
-                        ds.SortComponents();
-                        ds.SortDataPoints();
+                            //if (_result is DataSetType ds)
+                            //{
+                            //    // HÄR
+                            //    ds.SortComponents();
+                            //    ds.SortDataPoints();
+                            //}
+                        }
                     }
                 }
 
                 if (_result is DataSetType dataSet)
                 {
-                    return new DataSetType(dataSet);
+                    var newDataset = new DataSetType(dataSet);
+                    newDataset.DataPoints.CompleteWrite();
+                    newDataset.SortComponents();
+                    newDataset.SortDataPoints();
+                    return newDataset;
                 }
 
                 if (_result is ComponentType component)
                 {
-                    return new ComponentType(component);
+                    var newComponent = new ComponentType(component);
+                    newComponent.ComponentDataHandler.CompleteWrite();
+                    return newComponent;
                 }
 
                 return _result;
+
             }
             catch (VtlException)
             {
@@ -67,6 +91,10 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes
             }
             catch (Exception e)
             {
+                if(e.InnerException != null)
+                {
+                    throw new VtlException(e.InnerException.Message, e, Alias);
+                }
                 throw new VtlException(e.Message, e, Alias);
             }
         }
@@ -78,7 +106,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes
             if (Data is DataSetType dataSet)
                 return dataSet.DataSetComponents.Select(c => c.Name).ToArray();
             if (Data is ComponentType component)
-                return new []{component.Name};
+                return new[] { component.Name };
             return new string[0];
         }
 

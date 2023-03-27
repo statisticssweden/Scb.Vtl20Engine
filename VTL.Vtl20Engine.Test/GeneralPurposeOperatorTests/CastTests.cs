@@ -468,7 +468,7 @@ namespace VTL.Vtl20Engine.Test.GeneralPurposeOperatorTests
             var sut = new VtlEngine(new DataContainerFactory());
             var Ds_r = sut.Execute("m2 <- cast(\"200012\", time_period, \"YYYYMM\");", new Operand[0]);
             var result = Ds_r.FirstOrDefault(r => r.Persistant).GetValue() as ScalarType;
-            Assert.AreEqual(new TimePeriodType(2000, Duration.Month,12), result);
+            Assert.AreEqual(new TimePeriodType(2000, Duration.Month, 12), result);
         }
 
         [TestMethod]
@@ -652,6 +652,50 @@ namespace VTL.Vtl20Engine.Test.GeneralPurposeOperatorTests
             var Ds_r = sut.Execute("m2 <- cast(\"1980M06D20\", date, \"YYYY\\MMM\\DDD\");", new Operand[0]);
             var result = Ds_r.FirstOrDefault().GetValue() as ScalarType;
             Assert.AreEqual(new DateType(new DateTime(1980, 6, 20)), result);
+        }
+
+        [TestMethod]
+        public void CastTests_CastDateToString()
+        {
+            var t1 = new Operand()
+            {
+                Alias = "t1",
+                Data = new DateType(new DateTime(1980, 2, 2))
+            };
+
+            var sut = new VtlEngine(new DataContainerFactory());
+            var Ds_r = sut.Execute("m2 <- cast(t1, string, \"YYYY.MM.DD\");", new Operand[] { t1 });
+            var result = Ds_r.FirstOrDefault(x => x.Persistant == true).GetValue() as ScalarType;
+            Assert.AreEqual(new StringType("1980.02.02"), result);
+        }
+        [TestMethod]
+        public void CastTests_CastDateToString_VTLExample1()
+        {
+            var t1 = new Operand()
+            {
+                Alias = "t1",
+                Data = new DateType(new DateTime(2015, 3, 3, 09, 30, 45))
+            };
+
+            var sut = new VtlEngine(new DataContainerFactory());
+            var Ds_r = sut.Execute("m2 <- cast(t1, string, \"YYYY-MM-DDThh:mm:ssZ\");", new Operand[] { t1 });
+            var result = Ds_r.FirstOrDefault(x => x.Persistant == true).GetValue() as ScalarType;
+            Assert.AreEqual(new StringType("2015-03-03T09:30:45Z"), result);
+        }
+
+        [TestMethod]
+        public void CastTests_CastDateToString_VTLExample2()
+        {
+            var t1 = new Operand()
+            {
+                Alias = "t1",
+                Data = new DateType(new DateTime(2015, 3, 3, 09, 30, 45))
+            };
+
+            var sut = new VtlEngine(new DataContainerFactory());
+            var Ds_r = sut.Execute("m2 <- cast(t1, string, \"YYYYMMDDThhmmss-01\");", new Operand[] { t1 });
+            var result = Ds_r.FirstOrDefault(x => x.Persistant == true).GetValue() as ScalarType;
+            Assert.AreEqual(new StringType("20150303T093045-01"), result);
         }
 
         [TestMethod]

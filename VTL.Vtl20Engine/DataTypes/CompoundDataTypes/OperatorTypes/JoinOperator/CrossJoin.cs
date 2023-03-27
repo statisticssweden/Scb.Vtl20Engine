@@ -16,7 +16,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.JoinOperator
 
         internal override DataType PerformCalculation()
         {
-            var dsOperands = _operands.Select(o => o.GetValue()).OfType<DataSetType>().ToArray();
+            var dsOperands = _operands.AsParallel().Select(o => o.GetValue()).OfType<DataSetType>().ToArray();
             if (dsOperands.Length != _operands.Count)
             {
                 throw new Exception("cross_join kan endast hantera dataset.");
@@ -38,7 +38,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.JoinOperator
                 var datset2 = dsOperands[i];
                 intermediateResult = PerformCalculation(intermediateResult, datset2);
             }
-            
+
             return intermediateResult;
         }
 

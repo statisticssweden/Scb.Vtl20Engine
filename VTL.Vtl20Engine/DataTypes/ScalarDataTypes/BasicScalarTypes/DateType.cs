@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace VTL.Vtl20Engine.DataTypes.ScalarDataTypes.BasicScalarTypes
 {
@@ -29,6 +30,36 @@ namespace VTL.Vtl20Engine.DataTypes.ScalarDataTypes.BasicScalarTypes
             if (Value.HasValue)
             {
                 return Value.Value.ToString("yyyyMMdd-hh:mm");
+            }
+            return "Null";
+        }
+        public string ToString(string mask)
+        {
+            if (Value.HasValue)
+            {
+                var resultString = new StringBuilder();
+                var maskIndex = 0;
+                
+                while (maskIndex < mask.Length)
+                {
+                    switch (mask[maskIndex])
+                    {
+                        case'Y':
+                            resultString.Append('y');
+                            break;
+                        case 'D':
+                            resultString.Append('d');
+                            break;
+                        case 'h':
+                            resultString.Append('H');
+                            break;
+                        default:
+                            resultString.Append(mask[maskIndex]);
+                            break;
+                    }
+                    maskIndex++;
+                }
+                return Value.Value.ToString(resultString.ToString());
             }
             return "Null";
         }

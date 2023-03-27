@@ -294,12 +294,12 @@ namespace VTL.Vtl20Engine.Test.DataValidationOperatorTests
 
             Assert.AreEqual(6, result.DataSetComponents.Length);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -902,7 +902,7 @@ namespace VTL.Vtl20Engine.Test.DataValidationOperatorTests
                             {
                                 new StringType("2011"),
                                 new StringType("D"),
-                                new IntegerType(35)
+                                new IntegerType(null)
                             }
                         ),
                         new DataPointType
@@ -953,12 +953,12 @@ namespace VTL.Vtl20Engine.Test.DataValidationOperatorTests
 
             Assert.AreEqual(6, result.DataSetComponents.Length);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -981,42 +981,42 @@ namespace VTL.Vtl20Engine.Test.DataValidationOperatorTests
                 dataPointEnumerator.MoveNext();
                 Assert.AreEqual(new StringType("2011"), dataPointEnumerator.Current[id_1]);
                 Assert.AreEqual(new StringType("D"), dataPointEnumerator.Current[id_2]);
-                Assert.AreEqual(new BooleanType(true), dataPointEnumerator.Current[bool_var]);
+                Assert.IsFalse(dataPointEnumerator.Current[bool_var].HasValue());
                 Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorcode].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorlevel].HasValue());
 
                 dataPointEnumerator.MoveNext();
                 Assert.AreEqual(new StringType("2011"), dataPointEnumerator.Current[id_1]);
                 Assert.AreEqual(new StringType("I"), dataPointEnumerator.Current[id_2]);
                 Assert.AreEqual(new BooleanType(true), dataPointEnumerator.Current[bool_var]);
                 Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorcode].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorlevel].HasValue());
 
                 dataPointEnumerator.MoveNext();
                 Assert.AreEqual(new StringType("2012"), dataPointEnumerator.Current[id_1]);
                 Assert.AreEqual(new StringType("D"), dataPointEnumerator.Current[id_2]);
                 Assert.AreEqual(new BooleanType(true), dataPointEnumerator.Current[bool_var]);
                 Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorcode].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorlevel].HasValue());
 
                 dataPointEnumerator.MoveNext();
                 Assert.AreEqual(new StringType("2012"), dataPointEnumerator.Current[id_1]);
                 Assert.AreEqual(new StringType("I"), dataPointEnumerator.Current[id_2]);
                 Assert.AreEqual(new BooleanType(true), dataPointEnumerator.Current[bool_var]);
                 Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorcode].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorlevel].HasValue());
 
                 dataPointEnumerator.MoveNext();
                 Assert.AreEqual(new StringType("2013"), dataPointEnumerator.Current[id_1]);
                 Assert.AreEqual(new StringType("D"), dataPointEnumerator.Current[id_2]);
                 Assert.AreEqual(new BooleanType(true), dataPointEnumerator.Current[bool_var]);
                 Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorcode].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorlevel].HasValue());
 
                 dataPointEnumerator.MoveNext();
                 Assert.AreEqual(new StringType("2013"), dataPointEnumerator.Current[id_1]);
@@ -1039,24 +1039,24 @@ namespace VTL.Vtl20Engine.Test.DataValidationOperatorTests
                 Assert.AreEqual(new StringType("I"), dataPointEnumerator.Current[id_2]);
                 Assert.AreEqual(new BooleanType(true), dataPointEnumerator.Current[bool_var]);
                 Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorcode].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorlevel].HasValue());
 
                 dataPointEnumerator.MoveNext();
                 Assert.AreEqual(new StringType("2015"), dataPointEnumerator.Current[id_1]);
                 Assert.AreEqual(new StringType("D"), dataPointEnumerator.Current[id_2]);
                 Assert.AreEqual(new BooleanType(true), dataPointEnumerator.Current[bool_var]);
                 Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorcode].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorlevel].HasValue());
 
                 dataPointEnumerator.MoveNext();
                 Assert.AreEqual(new StringType("2015"), dataPointEnumerator.Current[id_1]);
                 Assert.AreEqual(new StringType("I"), dataPointEnumerator.Current[id_2]);
                 Assert.AreEqual(new BooleanType(true), dataPointEnumerator.Current[bool_var]);
                 Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
-                Assert.IsFalse(dataPointEnumerator.Current[imbalance].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorcode].HasValue());
+                Assert.IsFalse(dataPointEnumerator.Current[errorlevel].HasValue());
 
             }
         }
@@ -1514,7 +1514,7 @@ namespace VTL.Vtl20Engine.Test.DataValidationOperatorTests
                             {
                                 new StringType("2011"),
                                 new StringType("D"),
-                                new IntegerType(35)
+                                new IntegerType(null)
                             }
                         ),
                         new DataPointType
@@ -1565,12 +1565,12 @@ namespace VTL.Vtl20Engine.Test.DataValidationOperatorTests
 
             Assert.AreEqual(6, result.DataSetComponents.Length);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             using (var dataPointEnumerator = result.DataPoints.GetEnumerator())
             {
@@ -1890,12 +1890,12 @@ namespace VTL.Vtl20Engine.Test.DataValidationOperatorTests
 
             Assert.AreEqual(6, result.DataSetComponents.Length);
 
-            var id_1 = result.OriginalIndexOfComponent("Id_1");
-            var id_2 = result.OriginalIndexOfComponent("Id_2");
-            var bool_var = result.OriginalIndexOfComponent("bool_var");
-            var imbalance = result.OriginalIndexOfComponent("imbalance");
-            var errorcode = result.OriginalIndexOfComponent("errorcode");
-            var errorlevel = result.OriginalIndexOfComponent("errorlevel");
+            var id_1 = Array.IndexOf(result.ComponentSortOrder, "Id_1");
+            var id_2 = Array.IndexOf(result.ComponentSortOrder, "Id_2");
+            var bool_var = Array.IndexOf(result.ComponentSortOrder, "bool_var");
+            var imbalance = Array.IndexOf(result.ComponentSortOrder, "imbalance");
+            var errorcode = Array.IndexOf(result.ComponentSortOrder, "errorcode");
+            var errorlevel = Array.IndexOf(result.ComponentSortOrder, "errorlevel");
 
             Assert.AreEqual(typeof(IntegerType), result.DataSetComponents[errorcode].DataType);
             Assert.AreEqual(typeof(IntegerType), result.DataSetComponents[errorlevel].DataType);

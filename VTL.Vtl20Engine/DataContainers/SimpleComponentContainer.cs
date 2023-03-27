@@ -31,5 +31,9 @@ namespace VTL.Vtl20Engine.DataContainers
         public void Dispose()
         {
         }
+
+        public void CompleteWrite()
+        {
+        }
     }
 }

@@ -9,10 +9,13 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
     public class DataSetType : CompoundType
     {
         private ComponentType[] _dataSetComponents;
+
+        private readonly object sortLock = new object();
+
         public int DataPointCount => DataPoints.Length;
 
         public IDataPointContainer DataPoints { get; set; }
-
+        
         public DataSetType(ComponentType[] components, IDataPointContainer dataPointContainer)
         {
             _dataSetComponents = new ComponentType[components.Length];
@@ -55,14 +58,18 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
         {
         }
 
+        private static  readonly object _renameLock = new object();
         internal void RenameComponent(string oldName, string newName)
         {
-            var index = Array.IndexOf(ComponentSortOrder, oldName);
-            ComponentSortOrder[index] = newName;
-            var component = _dataSetComponents.FirstOrDefault(c => c.Name.Equals(oldName));
-            component.Rename(newName);
+            lock (_renameLock)
+            {
+                var index = Array.IndexOf(ComponentSortOrder, oldName);
+                ComponentSortOrder[index] = newName;
+                var component = _dataSetComponents.FirstOrDefault(c => c.Name.Equals(oldName));
+                component.Rename(newName);
 
-            DataPoints.RenameComponent(oldName, newName);
+                DataPoints.RenameComponent(oldName, newName);
+            }
         }
 
         private string[] _componentSortOrder;
@@ -87,10 +94,14 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
                 ds.DataPointCount * ds.DataSetComponents.Length);
             ComponentSortOrder = ds.DataSetComponents.Select(c => c.Name).ToArray();
             DataPoints.OriginalComponentOrder = ComponentSortOrder;
-            DataPoints.OriginalSortOrder = ds.DataPoints.SortOrder;
+            if (ds.DataPoints.SortOrder != null)
+            {
+                DataPoints.OriginalSortOrder = new OrderByName[ds.DataPoints.SortOrder.Length];
+                Array.Copy(ds.DataPoints.SortOrder, DataPoints.OriginalSortOrder, ds.DataPoints.SortOrder.Length);
+            }
             foreach (var dataPoint in ds.DataPoints)
             {
-                DataPoints.Add(dataPoint);
+                DataPoints.Add(new DataPointType(dataPoint));
             }
 
             _dataSetComponents = new ComponentType[ds.DataSetComponents.Length];
@@ -111,29 +122,37 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
         {
             get
             {
-                if (ComponentSortOrder != null && _sorted == null)
+                lock (sortLock)
                 {
-                    _sorted = new ComponentType[_dataSetComponents.Length];
-                    var all = Enumerable.Range(0, _dataSetComponents.Length).ToList();
-                    for (int i = 0; i < ComponentSortOrder.Length; i++)
+                    if (ComponentSortOrder != null && _sorted == null)
                     {
-                        var index = OriginalIndexOfComponent(ComponentSortOrder[i]);
-                        _sorted[i] = _dataSetComponents[index];
-                        all.Remove(index);
-                    }
+                        _sorted = new ComponentType[_dataSetComponents.Length];
+                        var all = Enumerable.Range(0, _dataSetComponents.Length).ToList();
+                        for (int i = 0; i < ComponentSortOrder.Length; i++)
+                        {
+                            var index = OriginalIndexOfComponent(ComponentSortOrder[i]);
+                            _sorted[i] = _dataSetComponents[index];
+                            all.Remove(index);
+                        }
 
-                    for (int i = ComponentSortOrder.Length; i < _dataSetComponents.Length; i++)
-                    {
-                        var index = all.FirstOrDefault();
-                        _sorted[i] = _dataSetComponents[index];
-                        all.Remove(index);
+                        for (int i = ComponentSortOrder.Length; i < _dataSetComponents.Length; i++)
+                        {
+                            var index = all.FirstOrDefault();
+                            _sorted[i] = _dataSetComponents[index];
+                            all.Remove(index);
+                        }
+                        return _sorted;
                     }
-                    return _sorted;
                 }
 
                 return _sorted;
             }
-            set => _dataSetComponents = value;
+            set {
+                lock (sortLock)
+                {
+                    _dataSetComponents = value;
+                }
+            }
         }
 
         public IEnumerator<DataPointType> GetDataPointEnumerator()
@@ -191,19 +210,20 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
                 SortDataPoints(ComponentSortOrder);
             }
 
-            if (_dataSetComponents.Any(c => c.Name.Equals(component.Name)))
+            var foundComponent = _dataSetComponents.FirstOrDefault(c => c.Name.Equals(component.Name));
+            if (foundComponent != null)
             {
-                index = OriginalIndexOfComponent(component);
-                _dataSetComponents[index] = component;
+                index = Array.IndexOf(_componentSortOrder, component.Name);
+                _dataSetComponents[Array.IndexOf(_dataSetComponents, foundComponent)] = component;
             }
             else
             {
                 index = _dataSetComponents.Length;
                 _dataSetComponents = _dataSetComponents.Append(component).ToArray();
-
+                ComponentSortOrder = ComponentSortOrder.Concat(new string[] { component.Name }).ToArray();
             }
 
-            using (var componentEnumerator = component._ComponentDataHandler.GetEnumerator())
+            using (var componentEnumerator = component.ComponentDataHandler.GetEnumerator())
             using (var dataSetEnumerator = DataPoints.GetEnumerator())
             {
                 var newDataPoints = VtlEngine.DataContainerFactory.CreateDataPointContainer(
@@ -246,7 +266,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
                     }
                     newDataPoints.Add(newDataPoint);
                 }
-
+                newDataPoints.CompleteWrite();
                 DataPoints = newDataPoints;
             }
         }
@@ -258,7 +278,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
             {
                 throw new Exception($"Hittade ingen komponent med namnet {name}");
             }
-            component._ComponentDataHandler = new DataSetComponentContainer(DataPoints, name);
+            component.ComponentDataHandler = new DataSetComponentContainer(DataPoints, name);
             return component;
         }
 
@@ -290,7 +310,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes
             DataPoints.Add(dataPoint);
             for (int i = 0; i < _dataSetComponents.Length; i++)
             {
-                _dataSetComponents[i]._ComponentDataHandler = new DataSetComponentContainer(DataPoints, _dataSetComponents[i].Name);
+                _dataSetComponents[i].ComponentDataHandler = new DataSetComponentContainer(DataPoints, _dataSetComponents[i].Name);
             }
         }
 

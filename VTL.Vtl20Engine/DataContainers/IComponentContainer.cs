@@ -28,5 +28,10 @@ namespace VTL.Vtl20Engine.DataContainers
         /// </summary>
         /// <param name="newName">New component name</param>
         void Rename(string newName);
+
+        /// <summary>
+        /// Flushes any buffer in the data container at the end of any writing operation
+        /// </summary>
+        void CompleteWrite();
     }
 }

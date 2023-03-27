@@ -34,7 +34,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
             {
                 if (scalar is NumberType number)
                 {
-                    if(!number.HasValue())
+                    if (!number.HasValue())
                     {
                         return number;
                     }
@@ -51,7 +51,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
 
                 if (scalar is BooleanType boolean)
                 {
-                    return new IntegerType(boolean.Equals(new BooleanType(true))? 1 : 0);
+                    return new IntegerType(boolean.Equals(new BooleanType(true)) ? 1 : 0);
                 }
 
                 if (scalar is StringType indataString)
@@ -84,7 +84,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
                     if (trimmedAndValidatedMask.Contains('.'))
                     {
                         var decimalString = trimmedAndValidatedMask.Split('.').Last();
-                        if (decimalString.Contains('*')|| decimalString.Contains('+'))
+                        if (decimalString.Contains('*') || decimalString.Contains('+'))
                         {
                             return new NumberType(resultNumber);
                         }
@@ -96,13 +96,18 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
 
             if (_type == typeof(StringType))
             {
-                if(!string.IsNullOrEmpty(_mask))
+                if (!string.IsNullOrEmpty(_mask))
                 {
-                    if(scalar is TimePeriodType timePeriodType)
+                    if (scalar is TimePeriodType timePeriodType)
                     {
                         return new StringType(timePeriodType.ToString(_mask.Trim('"')));
                     }
+                    if (scalar is DateType dateType)
+                    {
+                        return new StringType(dateType.ToString(_mask.Trim('"')));
+                    }
                 }
+
                 return new StringType(scalar.ToString());
             }
 
@@ -110,7 +115,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
             {
                 if (scalar is NumberType number)
                 {
-                    return new BooleanType(number.Equals(new NumberType(0.0m))? false : true);
+                    return new BooleanType(number.Equals(new NumberType(0.0m)) ? false : true);
                 }
 
                 if (scalar is StringType indataString)
@@ -131,7 +136,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
                 }
             }
 
-            if(_type == typeof(DateType))
+            if (_type == typeof(DateType))
             {
                 if (scalar is StringType stringType)
                 {
@@ -287,11 +292,11 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
 
             if (_type == typeof(IntegerType) &&
                 (dataType == typeof(NumberType) || dataType == typeof(BooleanType) || dataType == typeof(StringType))) return true;
-            
-            if (_type == typeof(NumberType) &&
-                (dataType == typeof(IntegerType)|| dataType == typeof(BooleanType) || dataType == typeof(StringType))) return true;
 
-            if (_type == typeof(BooleanType) && 
+            if (_type == typeof(NumberType) &&
+                (dataType == typeof(IntegerType) || dataType == typeof(BooleanType) || dataType == typeof(StringType))) return true;
+
+            if (_type == typeof(BooleanType) &&
                 (dataType == typeof(NumberType) || dataType == typeof(IntegerType))) return true;
 
             if (_type == typeof(DateType) &&
@@ -382,7 +387,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
                         }
                         stringIndex++;
                         maskIndex++;
-                        if (monthString.Length<2) throw new VtlException("Masken stämmer inte för värdet som castas.", new Exception(), null);
+                        if (monthString.Length < 2) throw new VtlException("Masken stämmer inte för värdet som castas.", new Exception(), null);
                         month += int.Parse(monthString.ToString());
                         if (duration > Duration.Month) duration = Duration.Month;
                         break;
@@ -403,7 +408,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.GeneralPurpo
                     case 'D':
                         var dayString = new StringBuilder();
                         dayString.Append(inputString[stringIndex]);
-                        while (maskIndex + 1 < mask.Length && mask[maskIndex + 1] == 'D' )
+                        while (maskIndex + 1 < mask.Length && mask[maskIndex + 1] == 'D')
                         {
                             stringIndex++;
                             maskIndex++;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using VTL.Vtl20Engine.Comparers;
 using VTL.Vtl20Engine.DataContainers;
 using VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperandTypes;
@@ -49,10 +50,14 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.DataValidati
 
         internal override DataType PerformCalculation()
         {
-            var opDs = _op.GetValue() as DataSetType;
-            var imbalanceDs = _imbalance?.GetValue() as DataSetType;
-            var errorCode = _errorcode?.GetValue() as ScalarType;
-            var errorLevel = _errorlevel?.GetValue() as ScalarType;
+            DataSetType opDs = null, imbalanceDs = null;
+            ScalarType errorCode = null, errorLevel = null;
+
+            Parallel.Invoke(
+                () => opDs = _op.GetValue() as DataSetType,
+                () => imbalanceDs = _imbalance?.GetValue() as DataSetType,
+                () => errorCode = _errorcode?.GetValue() as ScalarType,
+                () => errorLevel = _errorlevel?.GetValue() as ScalarType);
 
             var resultComponents = opDs.DataSetComponents.Where(c => c.Role == ComponentType.ComponentRole.Identifier).ToList();
             resultComponents.AddRange(new List<ComponentType>{
@@ -90,7 +95,7 @@ namespace VTL.Vtl20Engine.DataTypes.CompoundDataTypes.OperatorTypes.DataValidati
                     {
                         throw new Exception("Bara matchande datapunkter för operand och imbalance får förekomma i check.");
                     }
-                    var condition = opEnumerator.Current[measureIndex].HasValue() && (bool)(opEnumerator.Current[measureIndex] as BooleanType);
+                    var condition = !opEnumerator.Current[measureIndex].HasValue() || (bool)(opEnumerator.Current[measureIndex] as BooleanType);
                     if (_invalid && condition)
                     {
                         continue;

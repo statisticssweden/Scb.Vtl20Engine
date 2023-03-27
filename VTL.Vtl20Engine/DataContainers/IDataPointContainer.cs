@@ -31,7 +31,7 @@ namespace VTL.Vtl20Engine.DataContainers
         /// <summary>
         /// Flushes any buffer in the data container at the end of any writing operation
         /// </summary>
-        void Flush();
+        void CompleteWrite();
 
         /// <summary>
         /// Number of data points in the data
