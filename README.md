@@ -23,6 +23,13 @@ The following code block shows how the parser in Antlr is called:
 
 First, a character stream is created. A lexer is then created that identifies all the individual characters in the stream. The characters are then grouped as keywords and symbols, also called tokens. Then a parser is created which builds up a tree with relationships between all tokens.
 
+# Calculation object
+The tree built by Antlr is traversed using an implementation of the visitor pattern. Each node in the tree is visited and a calculation chain of operand objects is built. In practice, this has the same topology as the submitted tree, but it consists of objects of classes that can be executed to obtain a computation result. Below is the continuation of the code above.
+            var heap = inputOperands.ToList();
+            var visitor = new VtlVisitorImpl(heap);
+            visitor.VisitStart(context);
+Visitor.VisitStart visits the start node with the entire parser tree as context. The VisitStart method checks which nodes are at the next level in the context tree and then visits its visitor methods with the corresponding subtree as context. The tree is traversed by calls to nested VTL commands. Finally, the leaves of the tree will initiate calls to visitor methods that retrieve constant values or values stored in variables on the heap. The example in the figure below basically shows how the expression DSr <- DS1 + DS2; would be processed.
+
 Operand
 An operand is an object that can be passed as an argument to a VTL function, an operator. It encapsulates a data object and holds some metadata needed for the calculation. Operands have three important properties: Alias is the name of the operand and is used to identify it. Persistent specifies whether the operand should be considered as a result of the VTL run. If it is not marked as persistent, it is not available outside the VLT engine. Finally, Operand has the Data property of the DataType data type. It can take the form of an Operator or a fixed value, either of a simple type (integer, string, etc.) or of a composite type (dataset, component, etc.).
 
