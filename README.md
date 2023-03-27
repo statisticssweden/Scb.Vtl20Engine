@@ -38,4 +38,3 @@ The calculation is initiated by requesting the result for one of the nodes of th
 
 Operators
 VTL defines many operators and to keep them organized they are sorted into different categories. Each operator is implemented in a class except in some complex cases where helper classes are necessary. In the development project's directory structure, these classes are grouped in the same way as the operators are divided into chapters in the VTL document "Library of Operators". Many operators have similar behaviors, thus, to facilitate maintenance and further development as well as to avoid duplicated code, inheritance is used liberally in the implementation of the operators.
-
